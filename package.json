@@ -1,0 +1,26 @@
+{
+  "name": "capstone_part_2_swiftcart_submission_daniel_mason",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "part 2 of the capstone project for BDV-102",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "author": "Daniel Mason",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mysql2": "^3.14.0",
+    "pg": "^8.14.1",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.37.7",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9",
+    "sequelize-cli": "^6.6.2"
+  },
+  "keywords": []
+}
