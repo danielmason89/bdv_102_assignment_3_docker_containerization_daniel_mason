@@ -1,7 +1,7 @@
 Prerequisite
 
 CREATE DATABASE swiftcart;
-\c swiftcart;  -- (in PostgreSQL)
+USE swiftcart;  -- Switch to the swiftcart database
 
 -- 1. USERS
 -- Purpose: Stores user login and contact info
