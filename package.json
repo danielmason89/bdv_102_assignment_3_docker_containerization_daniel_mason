@@ -3,16 +3,19 @@
   "version": "1.0.0",
   "type": "module",
   "description": "part 2 of the capstone project for BDV-102",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "author": "Daniel Mason",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "formidable": "^3.5.2",
     "mysql2": "^3.14.0",
     "pg": "^8.14.1",
     "pg-hstore": "^2.3.4",
@@ -23,5 +26,13 @@
     "nodemon": "^3.1.9",
     "sequelize-cli": "^6.6.2"
   },
-  "keywords": []
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danielmason89/bdv_102_capstone_project_part_2_documentation_daniel_mason.git"
+  },
+  "bugs": {
+    "url": "https://github.com/danielmason89/bdv_102_capstone_project_part_2_documentation_daniel_mason/issues"
+  },
+  "homepage": "https://github.com/danielmason89/bdv_102_capstone_project_part_2_documentation_daniel_mason#readme"
 }

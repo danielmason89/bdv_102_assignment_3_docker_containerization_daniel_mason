@@ -1,5 +1,5 @@
-const Sequelize = require("sequelize");
-const sequelize = require("../util/database");
+import Sequelize from "sequelize";
+import sequelize  from "../util/database";
 
 const Cart = sequalize.define("cart", {});
 
