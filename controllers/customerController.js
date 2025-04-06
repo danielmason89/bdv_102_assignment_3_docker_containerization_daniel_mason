@@ -1,6 +1,6 @@
 import SiteUser from '../models/siteUserModel.js';
-// Optionally import bcrypt if you want to hash passwords
-// import bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
+
 
 // POST /api/customers → create new user
 export const createCustomer = async (req, res) => {
