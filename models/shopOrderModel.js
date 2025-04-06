@@ -12,8 +12,8 @@ const ShopOrder = sequelize.define('ShopOrder', {
     type: DataTypes.INTEGER,
     allowNull: false
   },
-  payment_method_id: DataTypes.INTEGER, // or you can define a separate table
-  shipping_address_id: DataTypes.INTEGER, // or a separate table
+  payment_method_id: DataTypes.INTEGER,
+  shipping_address_id: DataTypes.INTEGER,
   order_status: {
     type: DataTypes.STRING,
     allowNull: false

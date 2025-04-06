@@ -21,7 +21,7 @@ const SiteUser = sequelize.define('SiteUser', {
     allowNull: false
   }
 }, {
-  tableName: 'site_user', // match the actual table name in the DB
+  tableName: 'site_user',
   timestamps: false
 });
 
