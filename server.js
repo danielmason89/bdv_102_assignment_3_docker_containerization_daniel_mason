@@ -2,13 +2,17 @@ import express from "express";
 import dotenv from "dotenv"; 
 import cors from "cors";
 import pg from "pg";
+import cartRouter from "./routes/cartRoutes.js";
+import customerRouter from "./routes/customerRoutes.js";
+import productRouter from "./routes/productRoutes.js";
+import orderRouter from "./routes/orderRoutes.js";
 
 // import orderRouter from "./routes/orderRoutes.js";
 
 const app = express();
 dotenv.config();
 const { Pool } = pg;
-const PORT = 3000;
+const PORT = process.env.PORT || 4000;
 
 // Middleware
 app.use(cors());
@@ -28,7 +32,10 @@ const pool = new Pool({
 })
 
 // Routes
-// app.use('/api/orders', orderRouter);
+app.use('/api/orders', orderRouter);
+app.use('/api/cart', cartRouter);
+app.use('/api/customers', customerRouter);
+app.use('/api/products', productRouter);
 
 // Test route to check if the server is running and database connection is working
 app.get('/', async (req, res) => {
