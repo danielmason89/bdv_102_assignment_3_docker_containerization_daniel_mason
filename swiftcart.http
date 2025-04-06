@@ -1,7 +1,0 @@
-### GET /products request
-
-GET http://localhost:3000/
-
-### POST /products request
-
-# http://localhost:3000/products

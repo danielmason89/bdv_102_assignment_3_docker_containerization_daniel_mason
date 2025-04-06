@@ -1,43 +1,75 @@
-'use strict';
+import Sequelize from "sequelize";
+import sequelize from "../config/database.js";
 
-const fs = require('fs');
-const path = require('path');
-const Sequelize = require('sequelize');
-const process = require('process');
-const basename = path.basename(__filename);
-const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/../config/config.json')[env];
-const db = {};
+// Import each model
+import SiteUser from "./siteUserModel.js";
+import ProductCategory from "./productCategoryModel.js";
+import Product from "./productModel.js";
+import ShoppingCart from "./shoppingcartModel.js";
+import ShoppingCartItem from "./shoppingcartitemModel.js";
+import ShopOrder from "./shopOrderModel.js";
+import OrderLine from "./orderLineModel.js";
 
-let sequelize;
-if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
-} else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
-}
 
-fs
-  .readdirSync(__dirname)
-  .filter(file => {
-    return (
-      file.indexOf('.') !== 0 &&
-      file !== basename &&
-      file.slice(-3) === '.js' &&
-      file.indexOf('.test.js') === -1
-    );
-  })
-  .forEach(file => {
-    const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
-    db[model.name] = model;
-  });
-
-Object.keys(db).forEach(modelName => {
-  if (db[modelName].associate) {
-    db[modelName].associate(db);
-  }
+Product.belongsTo(ProductCategory, {
+  foreignKey: 'category_id',
+});
+ProductCategory.hasMany(Product, {
+  foreignKey: 'category_id',
 });
 
-db.sequelize = sequelize;
-db.Sequelize = Sequelize;
+ShoppingCart.belongsTo(SiteUser, {
+  foreignKey: 'user_id',
+});
+SiteUser.hasMany(ShoppingCart, {
+  foreignKey: 'user_id',
+});
 
-module.exports = db;
+ShoppingCartItem.belongsTo(ShoppingCart, {
+  foreignKey: 'cart_id',
+});
+ShoppingCart.hasMany(ShoppingCartItem, {
+  foreignKey: 'cart_id',
+});
+
+ShoppingCartItem.belongsTo(Product, {
+  foreignKey: 'product_id',
+});
+Product.hasMany(ShoppingCartItem, {
+  foreignKey: 'product_id',
+});
+
+ShopOrder.belongsTo(SiteUser, {
+  foreignKey: 'user_id',
+});
+SiteUser.hasMany(ShopOrder, {
+  foreignKey: 'user_id',
+});
+
+OrderLine.belongsTo(ShopOrder, {
+  foreignKey: 'order_id',
+});
+ShopOrder.hasMany(OrderLine, {
+  foreignKey: 'order_id',
+});
+
+OrderLine.belongsTo(Product, {
+  foreignKey: 'product_id',
+});
+Product.hasMany(OrderLine, {
+  foreignKey: 'product_id',
+});
+
+const db = {
+  sequelize,
+  Sequelize,
+  SiteUser,
+  ProductCategory,
+  Product,
+  ShoppingCart,
+  ShoppingCartItem,
+  ShopOrder,
+  OrderLine,
+};
+
+export default db;

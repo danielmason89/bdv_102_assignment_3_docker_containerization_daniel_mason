@@ -1,5 +1,12 @@
 {
     "cSpell.words": [
+        "PGDATABASE",
+        "PGHOST",
+        "PGPASSWORD",
+        "PGUSER",
+        "shoporder",
+        "shoppingcart",
+        "shoppingcartitem",
         "sslmode"
     ]
 }
