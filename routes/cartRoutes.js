@@ -1,5 +1,6 @@
 import express from 'express';
 import {
+  createCart,
   getCart,
   addToCart,
   removeFromCart,
@@ -7,6 +8,9 @@ import {
 } from '../controllers/cartController.js';
 
 const router = express.Router();
+
+// Create a new cart
+router.post('/', createCart);
 
 // GET items in the cart
 router.get('/:cartId', getCart);

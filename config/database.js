@@ -15,7 +15,7 @@ const sequelize = new Sequelize(PGDATABASE, PGUSER, PGPASSWORD, {
       rejectUnauthorized: false,
     },
   },
-  logging: false,
+  logging: false, // set to true to see SQL logs
 });
 
 export default sequelize;

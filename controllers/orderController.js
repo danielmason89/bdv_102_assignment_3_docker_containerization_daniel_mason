@@ -3,19 +3,18 @@ import ShoppingCartItem from '../models/shoppingcartitemModel.js';
 import ShopOrder from '../models/shopOrderModel.js';
 import OrderLine from '../models/orderLineModel.js';
 import Product from '../models/productModel.js';
+import sequelize from '../config/database.js';
 
-// POST /api/orders → place an order (move from cart to order)
+/**
+ * POST /api/orders
+ * Places an order for a given user_id and cart_id.
+ * Moves cart items to the order, calculates total, decrements product stock.
+ */
 export const placeOrder = async (req, res) => {
-  /*
-    Expected in req.body or query:
-    - user_id (the user who is placing the order)
-    - cart_id (the cart that is being converted to an order)
-    - possibly shipping address, payment method, etc.
-  */
   try {
     const { user_id, cart_id, payment_method_id, shipping_address_id } = req.body;
 
-    // 1. Verify the cart exists and fetch items
+    // 1. Verify the cart exists and belongs to the user
     const cart = await ShoppingCart.findByPk(cart_id);
     if (!cart || cart.user_id !== user_id) {
       return res.status(400).json({ message: 'Invalid cart or user mismatch' });
@@ -30,38 +29,50 @@ export const placeOrder = async (req, res) => {
       return res.status(400).json({ message: 'Cart is empty' });
     }
 
-    // 2. Calculate total
-    let orderTotal = 0;
-    cartItems.forEach(item => {
-      orderTotal += item.quantity * parseFloat(item.Product.price);
+    const result = await sequelize.transaction(async (t) => {
+      let orderTotal = 0;
+
+      // 2. Check stock & calculate order total
+      for (const item of cartItems) {
+        const product = item.Product;
+        // If stock is insufficient
+        if (product.quantity_in_stock < item.quantity) {
+          throw new Error(`Insufficient stock for product: ${product.name}`);
+        }
+        orderTotal += item.quantity * parseFloat(product.price);
+      }
+
+      // 3. Create the order
+      const newOrder = await ShopOrder.create({
+        user_id,
+        payment_method_id,
+        shipping_address_id,
+        order_status: 'PLACED',
+        order_total: orderTotal
+      }, { transaction: t });
+
+      // 4. For each cart item, create an order line & decrement stock
+      for (const item of cartItems) {
+        const product = item.Product;
+
+        await OrderLine.create({
+          order_id: newOrder.id,
+          product_id: item.product_id,
+          quantity: item.quantity,
+          price: product.price
+        }, { transaction: t });
+
+        product.quantity_in_stock -= item.quantity;
+        await product.save({ transaction: t });
+      }
+
+      // 5. Clear the cart items
+      await ShoppingCartItem.destroy({ where: { cart_id } }, { transaction: t });
+
+      return newOrder;
     });
 
-    // 3. Create order
-    const newOrder = await ShopOrder.create({
-      user_id,
-      payment_method_id,
-      shipping_address_id,
-      order_status: 'PLACED', // or 'PENDING', etc.
-      order_total: orderTotal
-    });
-
-    // 4. For each cart item, create an order line
-    const orderLinePromises = cartItems.map(item => {
-      return OrderLine.create({
-        order_id: newOrder.id,
-        product_id: item.product_id,
-        quantity: item.quantity,
-        price: item.Product.price
-      });
-    });
-
-    await Promise.all(orderLinePromises);
-
-    // 5. (Optional) clear the cart
-    await ShoppingCartItem.destroy({ where: { cart_id } });
-
-    // 6. Return the new order with line items
-    const createdOrder = await ShopOrder.findByPk(newOrder.id, {
+    const createdOrder = await ShopOrder.findByPk(result.id, {
       include: [OrderLine]
     });
 
@@ -74,7 +85,10 @@ export const placeOrder = async (req, res) => {
   }
 };
 
-// GET /api/orders/:id → fetch an existing order
+/**
+ * GET /api/orders/:id
+ * Fetches an existing order by its ID, including order lines.
+ */
 export const getOrder = async (req, res) => {
   try {
     const { id } = req.params;

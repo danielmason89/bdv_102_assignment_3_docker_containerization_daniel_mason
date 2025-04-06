@@ -1,28 +1,43 @@
 import SiteUser from '../models/siteUserModel.js';
 import bcrypt from 'bcrypt';
 
-
-// POST /api/customers → create new user
+/**
+ * POST /api/customers
+ * Creates a new customer (user).
+ */
 export const createCustomer = async (req, res) => {
   try {
     const { email_address, phone_number, password } = req.body;
 
-    // Example: simple password hashing (if needed)
-    // const hashedPassword = await bcrypt.hash(password, 10);
+    // Simple input validation
+    if (!email_address || !phone_number || !password) {
+      return res.status(400).json({ message: 'All fields are required' });
+    }
+
+    // (Optional) Hash the password for security
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = await SiteUser.create({
       email_address,
       phone_number,
-      password //: hashedPassword, // if using hashing
+      password: hashedPassword
     });
 
-    res.status(201).json(newUser);
+    // Return user info without the password
+    return res.status(201).json({
+      id: newUser.id,
+      email_address: newUser.email_address,
+      phone_number: newUser.phone_number
+    });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    return res.status(500).json({ error: err.message });
   }
 };
 
-// GET /api/customers/:id → fetch user info
+/**
+ * GET /api/customers/:id
+ * Fetches user info by ID.
+ */
 export const getCustomer = async (req, res) => {
   try {
     const { id } = req.params;
@@ -32,8 +47,8 @@ export const getCustomer = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: 'Customer not found' });
     }
-    res.json(user);
+    return res.json(user);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    return res.status(500).json({ error: err.message });
   }
 };
