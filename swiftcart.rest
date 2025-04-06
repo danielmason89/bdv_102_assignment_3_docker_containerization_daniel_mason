@@ -1,0 +1,33 @@
+# Get all products
+GET http://localhost:4000/api/products
+
+###
+# Get single product
+GET http://localhost:4000/api/products/1
+
+###
+# Create new user
+POST http://localhost:4000/api/customers
+Content-Type: application/json
+
+{
+  "email_address": "[email protected]",
+  "phone_number": "123-456-7890",
+  "password": "p@ssw0rd"
+}
+
+###
+# Add product to cart
+POST http://localhost:4000/api/cart/1/add
+Content-Type: application/json
+
+{
+  "product_id": 1,
+  "quantity": 2
+}
+
+###
+# Remove product from cart
+DELETE http://localhost:4000/api/cart/1/remove/1
+
+...
