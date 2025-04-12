@@ -1,0 +1,357 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Swiftcart API",
+    "version": "2.0.0",
+    "description": "An OpenAPI spec derived from Thunder/Rest Client requests for Swiftcart E-commerce API for BDV-102 Assignment 3: Docker Containerization."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "paths": {
+    "/api/customers": {
+      "post": {
+        "summary": "Create a new customer",
+        "operationId": "createCustomer",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email_address": {
+                    "type": "string",
+                    "example": "[email protected]"
+                  },
+                  "phone_number": {
+                    "type": "string",
+                    "example": "613-203-6255"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "passwors123"
+                  }
+                },
+                "required": ["email_address", "phone_number", "password"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Customer created successfully"
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/api/cart": {
+      "post": {
+        "summary": "Create a new cart for a user",
+        "operationId": "createCart",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "user_id": {
+                    "type": "integer",
+                    "example": 6
+                  }
+                },
+                "required": ["user_id"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Cart created successfully"
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/api/products": {
+      "get": {
+        "summary": "Get all products",
+        "operationId": "getAllProducts",
+        "responses": {
+          "200": {
+            "description": "A JSON array of products",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Product"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cart/{cartId}/add": {
+      "post": {
+        "summary": "Add a product to a cart",
+        "operationId": "addProductToCart",
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The ID of the cart to which the product is added"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "product_id": {
+                    "type": "integer",
+                    "example": 16
+                  },
+                  "quantity": {
+                    "type": "integer",
+                    "example": 2
+                  }
+                },
+                "required": ["product_id", "quantity"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Product successfully added to cart"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "404": {
+            "description": "Cart not found"
+          }
+        }
+      }
+    },
+    "/api/cart/{cartId}": {
+      "get": {
+        "summary": "View contents of a cart",
+        "operationId": "viewCartContents",
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The contents of the specified cart",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "cartId": { "type": "integer" },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/CartItem"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Cart not found"
+          }
+        }
+      }
+    },
+    "/api/cart/{cartId}/quantity": {
+      "patch": {
+        "summary": "Update quantity of a product in cart",
+        "operationId": "updateProductQuantity",
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "product_id": {
+                    "type": "integer",
+                    "example": 16
+                  },
+                  "quantity": {
+                    "type": "integer",
+                    "example": 5
+                  }
+                },
+                "required": ["product_id", "quantity"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Quantity updated successfully"
+          },
+          "404": {
+            "description": "Cart or product not found"
+          }
+        }
+      }
+    },
+    "/api/cart/{cartId}/remove/{productId}": {
+      "delete": {
+        "summary": "Remove product from cart",
+        "operationId": "removeProductFromCart",
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          },
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product removed successfully"
+          },
+          "404": {
+            "description": "Cart or product not found"
+          }
+        }
+      }
+    },
+    "/api/orders": {
+      "post": {
+        "summary": "Place an order",
+        "operationId": "placeAnOrder",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "user_id": { "type": "integer", "example": 4 },
+                  "cart_id": { "type": "integer", "example": 1 },
+                  "payment_method_id": { "type": "integer", "example": 123 },
+                  "shipping_address_id": { "type": "integer", "example": 999 }
+                },
+                "required": ["user_id", "cart_id", "payment_method_id", "shipping_address_id"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Order placed successfully"
+          },
+          "400": {
+            "description": "Invalid request data"
+          }
+        }
+      }
+    },
+    "/api/orders/{orderId}": {
+      "get": {
+        "summary": "Get order by ID",
+        "operationId": "getOrderById",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "orderId": { "type": "integer" },
+                    "user_id": { "type": "integer" },
+                    "cart_id": { "type": "integer" },
+                    "payment_method_id": { "type": "integer" },
+                    "shipping_address_id": { "type": "integer" },
+                    "order_status": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Order not found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Product": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "price": { "type": "number", "format": "float" },
+          "quantity_in_stock": { "type": "integer" }
+        }
+      },
+      "CartItem": {
+        "type": "object",
+        "properties": {
+          "product_id": { "type": "integer" },
+          "quantity": { "type": "integer" }
+        }
+      }
+    }
+  }
+}
