@@ -1,8 +1,8 @@
-# Capstone Project, Part #2: Web API Documentation – Swiftcart’s E-commerce Platform Backend System
+# Assignment 3#: Web API & Docker Documentation – Swiftcart’s E-commerce Platform Backend System
 
 ## Table of Contents
 
-- [Capstone Project, Part #2: Web API Documentation – Swiftcart’s E-commerce Platform Backend System](#capstone-project-part-2-web-api-documentation--swiftcarts-e-commerce-platform-backend-system)
+- [Assignment 3#: Web API \& Docker Documentation – Swiftcart’s E-commerce Platform Backend System](#assignment-3-web-api--docker-documentation--swiftcarts-e-commerce-platform-backend-system)
   - [Table of Contents](#table-of-contents)
   - [Running the Project](#running-the-project)
   - [Environment Variables](#environment-variables)

@@ -1,12 +1,14 @@
 {
-  "name": "capstone_part_2_swiftcart_submission_daniel_mason",
+  "name": "assignment_3_docker_containerization_swiftcart_submission_daniel_mason",
   "version": "1.0.0",
   "type": "module",
-  "description": "part 2 of the capstone project for BDV-102",
+  "description": "assignment 3# for BDV-102",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "compose": "docker-compose up",
+    "build": "docker compose up --build"
   },
   "author": "Daniel Mason",
   "license": "ISC",
@@ -32,10 +34,10 @@
   "keywords": [],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/danielmason89/bdv_102_capstone_project_part_2_documentation_daniel_mason.git"
+    "url": "git+https://github.com/danielmason89/bdv_102_assignment_3_docker_containerization_daniel_mason.git"
   },
   "bugs": {
-    "url": "https://github.com/danielmason89/bdv_102_capstone_project_part_2_documentation_daniel_mason/issues"
+    "url": "https://github.com/danielmason89/bdv_102_assignment_3_docker_containerization_daniel_mason/issues"
   },
-  "homepage": "https://github.com/danielmason89/bdv_102_capstone_project_part_2_documentation_daniel_mason#readme"
+  "homepage": "https://github.com/danielmason89/bdv_102_assignment_3_docker_containerization_daniel_mason#readme"
 }
