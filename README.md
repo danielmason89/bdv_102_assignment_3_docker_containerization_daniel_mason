@@ -7,6 +7,9 @@
   - [Running the Project](#running-the-project)
   - [Environment Variables](#environment-variables)
     - [Install Dependencies](#install-dependencies)
+  - [Docker Implementation](#docker-implementation)
+    - [Pull from Docker Hub](#pull-from-docker-hub)
+    - [Build \& Run from Docker (Locally)](#build--run-from-docker-locally)
     - [Test Endpoints](#test-endpoints)
   - [Endpoints Overview](#endpoints-overview)
     - [Create a New Cart](#create-a-new-cart)
@@ -57,6 +60,42 @@ npm start
 
 By default, the server listens on port 3000 (or on whatever port you set in your .env file).
 
+---
+
+## Docker Implementation
+
+### Pull from Docker Hub
+
+The Swiftcart image is available on Docker Hub via this here, [https://hub.docker.com/repositories/danmasson0]. From there you'll be able to pull and run the app directly with out building it using these commands:
+
+```bash
+docker pull danmasson0/assignment_3_docker_containerization_submission_daniel_mason-web:latest
+
+docker run -p 3000:3000 \
+  -e PGHOST=your-neon-hostname.eastus2.azure.neon.tech \
+  -e PGUSER=your_neon_user \
+  -e PGPASSWORD=supersecretpassword \
+  -e PGDATABASE=your_db_name \
+  -e DB_PORT=5432 \
+  -e PORT=3000 \
+  danmasson0/assignment_3_docker_containerization_submission_daniel_mason-web:latest
+```
+
+### Build & Run from Docker (Locally)
+
+If you **cloned** the repository and want to build the Docker image yourself instead of pulling from Docker Hub, follow these steps:
+
+1. **Install Docker** on your machine (if not already installed).
+2. **Navigate** to the project root (where the Dockerfile is located).
+
+3. **Build** the Docker image (replace `your-username` with any name or your Docker Hub username):
+
+   ```bash
+   docker build -t your-username/assignment_3_docker_containerization_submission_daniel_mason-web:1.0 .
+   ```
+
+[https://hub.docker.com/repositories/danmasson0]: https://hub.docker.com/repositories/danmasson0
+
 ### Test Endpoints
 
 ```bash
@@ -66,6 +105,10 @@ By default, the server listens on port 3000 (or on whatever port you set in your
 
 ** If there's an issue you can also use Postman or Insomnia to test your endpoints.**
 ```
+
+Moreover, it is also possible to test the different endpoints using OpenAPI (Swagger) using this url: [http://localhost:3000/api-docs/]. Once you've cloned the project, and have it running locally with the docker container and credentials.
+
+[http://localhost:3000/api-docs/]: http://localhost:3000/api-docs/
 
 ## Endpoints Overview
 
